@@ -1,5 +1,27 @@
 <script lang="ts">
   import * as CommandPalette from '../../../../src/lib';
+  import { CommandPaletteConfig, CommandPaletteInstance, openCommandPalette } from '../../../../src/lib/command-palette'
+  let commandPaletteInstance: any;
+  const config = new CommandPaletteConfig({
+    header: 'Command Palette Header',
+    body: ['Item 1', 'Item 2', 'Item 3'],
+    footer: 'Command Palette Footer',
+    searchFunction: (value: string) => {
+      return ['Item 1', 'Item 2', 'Item 3'].filter((item) =>
+        item.toLowerCase().includes(value.toLowerCase())
+      );
+    },
+  });
+
+  function openPalette() {
+    commandPaletteInstance = openCommandPalette(config);
+  }
+
+  function closePalette() {
+    if (commandPaletteInstance) {
+      commandPaletteInstance.close();
+    }
+  }
 </script>
 
 <CommandPalette.Root onclose={() => console.log('close')} class="w-[600px]">
@@ -76,6 +98,8 @@
         <button class="">Select</button>
         <button class="text-slate-600">Cancel</button>
       </div>
+      <button on:click={openPalette}>Open Command Palette</button>
+      <button on:click={closePalette}>Close Command Palette</button>
     </CommandPalette.Footer>
   </CommandPalette.Content>
 </CommandPalette.Root>
